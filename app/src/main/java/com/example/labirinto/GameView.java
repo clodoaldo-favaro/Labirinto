@@ -16,6 +16,16 @@ public class GameView extends View {
         super(context, attrs);
     }
 
+    private void createMaze() {
+        cells = new Cell[COLS][ROWS];
+
+        for (int i = 0; i < COLS; i++) {
+            for (int j = 0; j < ROWS; j++) {
+                cells[i][j] = new Cell(i, j);
+            }
+        }
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawColor(Color.WHITE);
