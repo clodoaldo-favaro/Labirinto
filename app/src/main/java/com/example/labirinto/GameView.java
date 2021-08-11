@@ -23,7 +23,8 @@ public class GameView extends View {
     }
 
     private Vibrator vibrator;
-    private Context mContext;
+    private static final int MAX_LEVELS = 3;
+    private int currentLevel = 1;
 
     private Cell[][] cells;
     private Cell player, exit;
@@ -239,7 +240,11 @@ public class GameView extends View {
 
     private void checkExit() {
         if (player == exit) {
-            createMaze();
+            if (currentLevel < MAX_LEVELS) {
+                createMaze();
+                currentLevel++;
+            }
+
         }
     }
 
