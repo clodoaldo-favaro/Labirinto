@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">Labirinto</string>
+    <string name="app_name">Labirinto Loki</string>
+    <string name="btn_newgame">New Game</string>
+    <string name="btn_exit">Exit</string>
 </resources>
