@@ -161,6 +161,12 @@ public class GameView extends View {
 
         canvas.translate(hMargin, vMargin);
 
+        if (currentLevel == 2) {
+            wallPaint.setColor(Color.BLUE);
+        } else if (currentLevel == 3) {
+            wallPaint.setColor(Color.RED);
+        }
+
         for (int x = 0; x < COLS; x++) {
             for (int y = 0; y < ROWS; y++) {
                 if (cells[x][y].topWall) {
@@ -191,15 +197,6 @@ public class GameView extends View {
                 playerPaint
         );
 
-        /*
-        canvas.drawRect(
-                exit.col*cellSize+margin,
-                exit.row*cellSize+margin,
-                (exit.col + 1)*cellSize-margin,
-                (exit.row + 1)*cellSize-margin,
-                exitPaint
-        );
-        */
     }
 
     private void movePlayer(Direction direction) {
