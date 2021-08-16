@@ -5,6 +5,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorManager;
 import android.os.Vibrator;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -23,6 +26,9 @@ public class GameView extends View {
     }
 
     private Vibrator vibrator;
+    private SensorManager sensorManager;
+    private Sensor gyroscopeSensor;
+
     private static final int MAX_LEVELS = 3;
     private int currentLevel = 1;
 
@@ -50,6 +56,8 @@ public class GameView extends View {
         random = new Random();
 
         vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        gyroscopeSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
 
         createMaze();
     }
@@ -245,8 +253,13 @@ public class GameView extends View {
         }
     }
 
+    public void onSensorChanged(SensorEvent event) {
+        System.out.println(event.sensor.getName());
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             return true;
         }
