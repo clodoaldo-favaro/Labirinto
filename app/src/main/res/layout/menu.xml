@@ -8,31 +8,31 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="288dp"
-        android:layout_height="333dp"
+        android:layout_width="325dp"
+        android:layout_height="362dp"
         app:srcCompat="@drawable/titulo_jogo"
-        tools:layout_editor_absoluteX="61dp"
-        tools:layout_editor_absoluteY="52dp" />
+        tools:layout_editor_absoluteX="79dp"
+        tools:layout_editor_absoluteY="40dp" />
 
     <Button
         android:id="@+id/button_start"
-        android:layout_width="245dp"
-        android:layout_height="47dp"
-        android:layout_marginTop="424dp"
+        android:layout_width="0dp"
+        android:layout_height="61dp"
+        android:layout_marginTop="536dp"
         android:text="Start Game"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.518"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button_quit"
-        android:layout_width="245dp"
-        android:layout_height="47dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
         android:text="Exit"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.518"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_start" />
 
