@@ -12,6 +12,7 @@ import android.os.Vibrator;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
@@ -168,6 +169,9 @@ public class GameView extends View {
         vMargin = (height - ROWS*cellSize)/2;
 
         canvas.translate(hMargin, vMargin);
+
+        //TextView textView = (TextView) findViewById(R.id.currentLevelTextView);
+        //textView.setText("Level " + currentLevel);
 
         if (currentLevel == 2) {
             wallPaint.setColor(Color.BLUE);
