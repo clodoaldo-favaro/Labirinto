@@ -152,9 +152,24 @@ public class GameView extends View {
         }
     }
 
+    public void drawCurrentLevelText(Canvas canvas) {
+        Paint textPaint = new Paint();
+        textPaint.setTextAlign(Paint.Align.CENTER);
+        textPaint.setColor(Color.BLACK);
+        textPaint.setTextSize(48f);
+
+        int xPos = (canvas.getWidth() / 2);
+        //int yPos = (int) ((canvas.getHeight() / 2) - ((textPaint.descent() + textPaint.ascent()) / 2)) ;
+        //((textPaint.descent() + textPaint.ascent()) / 2) is the distance from the baseline to the center.
+
+        canvas.drawText("Level " + currentLevel, xPos, 48, textPaint);
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawColor(Color.WHITE);
+
+        drawCurrentLevelText(canvas);
 
         int width = getWidth();
         int height = getHeight();
