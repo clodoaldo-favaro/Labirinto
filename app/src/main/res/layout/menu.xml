@@ -11,8 +11,8 @@
         android:layout_width="325dp"
         android:layout_height="362dp"
         app:srcCompat="@drawable/titulo_jogo"
-        tools:layout_editor_absoluteX="79dp"
-        tools:layout_editor_absoluteY="40dp" />
+        tools:layout_editor_absoluteX="43dp"
+        tools:layout_editor_absoluteY="43dp" />
 
     <Button
         android:id="@+id/button_start"
