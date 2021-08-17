@@ -10,9 +10,11 @@
         android:id="@+id/imageView"
         android:layout_width="325dp"
         android:layout_height="362dp"
-        app:srcCompat="@drawable/titulo_jogo"
-        tools:layout_editor_absoluteX="43dp"
-        tools:layout_editor_absoluteY="43dp" />
+        app:layout_constraintBottom_toTopOf="@+id/button_start"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/titulo_jogo" />
 
     <Button
         android:id="@+id/button_start"
@@ -20,6 +22,7 @@
         android:layout_height="61dp"
         android:layout_marginTop="536dp"
         android:text="Start Game"
+        android:onClick="selfie"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
