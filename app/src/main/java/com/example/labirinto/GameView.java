@@ -2,6 +2,7 @@ package com.example.labirinto;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -262,6 +263,8 @@ public class GameView extends View {
             if (currentLevel < MAX_LEVELS) {
                 createMaze();
                 currentLevel++;
+            } else {
+                getContext().startActivity(new Intent(getContext(),com.example.labirinto.GameOver.class));
             }
 
         }
