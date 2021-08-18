@@ -159,10 +159,8 @@ public class GameView extends View {
         textPaint.setTextSize(48f);
 
         int xPos = (canvas.getWidth() / 2);
-        //int yPos = (int) ((canvas.getHeight() / 2) - ((textPaint.descent() + textPaint.ascent()) / 2)) ;
-        //((textPaint.descent() + textPaint.ascent()) / 2) is the distance from the baseline to the center.
 
-        canvas.drawText("Level " + currentLevel, xPos, 48, textPaint);
+        canvas.drawText("Level " + currentLevel, xPos, 56, textPaint);
     }
 
     @Override
@@ -175,18 +173,15 @@ public class GameView extends View {
         int height = getHeight();
 
         if (width/height < COLS/ROWS) {
-            cellSize = width/(COLS + 1);
+            cellSize = width/(COLS + 1) - 12;
         } else {
-            cellSize = height/(ROWS + 1);
+            cellSize = height/(ROWS + 1) - 12;
         }
 
         hMargin = (width - COLS*cellSize)/2;
         vMargin = (height - ROWS*cellSize)/2;
 
         canvas.translate(hMargin, vMargin);
-
-        //TextView textView = (TextView) findViewById(R.id.currentLevelTextView);
-        //textView.setText("Level " + currentLevel);
 
         if (currentLevel == 2) {
             wallPaint.setColor(Color.BLUE);
