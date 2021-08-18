@@ -173,9 +173,9 @@ public class GameView extends View {
         int height = getHeight();
 
         if (width/height < COLS/ROWS) {
-            cellSize = width/(COLS + 1) - 12;
+            cellSize = width/(COLS + 1) - 8;
         } else {
-            cellSize = height/(ROWS + 1) - 12;
+            cellSize = height/(ROWS + 1) - 8;
         }
 
         hMargin = (width - COLS*cellSize)/2;
