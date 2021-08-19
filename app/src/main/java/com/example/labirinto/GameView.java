@@ -303,9 +303,11 @@ public class GameView extends View implements MediaPlayer.OnCompletionListener {
             case ACTION_CREATE_MAZE:
                 currentLevel++;
                 createMaze();
+                invalidate();
                 break;
             case ACTION_END_GAME:
                 getContext().startActivity(new Intent(getContext(),com.example.labirinto.GameOver.class));
+                invalidate();
                 break;
             default:
                 System.out.println("Finished");
