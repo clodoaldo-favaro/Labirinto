@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 
-public class GameView extends View implements MediaPlayer.OnCompletionListener {
+public class GameView extends View  {
 
     private enum Direction {
         UP, DOWN, LEFT, RIGHT
@@ -52,7 +52,7 @@ public class GameView extends View implements MediaPlayer.OnCompletionListener {
 
     MediaPlayer mp;
 
-    public GameView(Context context, @Nullable AttributeSet attrs) {
+    public GameView(Context context, @Nullable AttributeSet attrs)  {
         super(context, attrs);
 
         wallPaint = new Paint();
@@ -235,7 +235,7 @@ public class GameView extends View implements MediaPlayer.OnCompletionListener {
 
     }
 
-    private void movePlayer(Direction direction) {
+    private void movePlayer(Direction direction)  {
         switch (direction) {
             case UP:
                 if (!player.topWall) {
@@ -272,7 +272,7 @@ public class GameView extends View implements MediaPlayer.OnCompletionListener {
     }
 
     private void playSound(String type) {
-        int resId;
+        int resId, time;
 
         switch (type) {
             case "START":
@@ -289,38 +289,36 @@ public class GameView extends View implements MediaPlayer.OnCompletionListener {
                 break;
         }
 
+        if (mp != null) {
+            mp.stop();
+            mp.release();
+        }
+
         mp = MediaPlayer.create(getContext(), resId);
-        mp.setOnCompletionListener(this);
-
+        time = mp.getDuration();
         mp.start();
-    }
 
-    @Override
-    public void onCompletion(MediaPlayer mediaPlayer) {
-        mp.release();
-
-        switch (nextAction) {
-            case ACTION_CREATE_MAZE:
-                currentLevel++;
-                createMaze();
-                break;
-            case ACTION_END_GAME:
-                getContext().startActivity(new Intent(getContext(),com.example.labirinto.GameOver.class));
-                break;
-            default:
-                System.out.println("Finished");
-                break;
+        if (type == "EXIT") {
+            try {
+                Thread.sleep(time + 10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    private void checkExit() {
+
+
+    private void checkExit()  {
         if (player == exit) {
-            if (currentLevel < MAX_LEVELS) {
-                nextAction = ACTION_CREATE_MAZE;
-            } else {
-                nextAction = ACTION_END_GAME;
-            }
             playSound("EXIT");
+            if (currentLevel < MAX_LEVELS) {
+                currentLevel++;
+                createMaze();
+            } else {
+                getContext().startActivity(new Intent(getContext(),com.example.labirinto.GameOver.class));
+            }
+
         }
     }
 
