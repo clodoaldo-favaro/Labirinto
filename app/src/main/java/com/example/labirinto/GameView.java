@@ -105,7 +105,7 @@ public class GameView extends View implements MediaPlayer.OnCompletionListener {
         } while (!stack.empty());
 
         nextAction = "NOTHING";
-        playSound("START");
+        //playSound("START");
 
     }
 
@@ -317,10 +317,13 @@ public class GameView extends View implements MediaPlayer.OnCompletionListener {
         if (player == exit) {
             if (currentLevel < MAX_LEVELS) {
                 nextAction = ACTION_CREATE_MAZE;
+                currentLevel++;
+                createMaze();
             } else {
                 nextAction = ACTION_END_GAME;
+                getContext().startActivity(new Intent(getContext(),com.example.labirinto.GameOver.class));
             }
-            playSound("EXIT");
+            //playSound("EXIT");
         }
     }
 
