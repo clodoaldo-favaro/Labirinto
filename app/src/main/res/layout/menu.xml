@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="354dp"
-        android:layout_height="355dp"
+        android:layout_width="260dp"
+        android:layout_height="268dp"
         android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
@@ -21,9 +21,11 @@
         android:id="@+id/button_start"
         android:layout_width="0dp"
         android:layout_height="61dp"
-        android:layout_marginBottom="88dp"
+        android:layout_marginBottom="68dp"
+        android:fontFamily="@font/robotoslab_regular"
         android:onClick="selfie"
         android:text="Start Game"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
