@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 
-public class GameView extends View implements MediaPlayer.OnCompletionListener {
+public class GameView extends View {
 
     private enum Direction {
         UP, DOWN, LEFT, RIGHT
@@ -290,27 +290,26 @@ public class GameView extends View implements MediaPlayer.OnCompletionListener {
         }
 
         mp = MediaPlayer.create(getContext(), resId);
-        mp.setOnCompletionListener(this);
+        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                mediaPlayer.release();
+
+                switch (nextAction) {
+                    case ACTION_CREATE_MAZE:
+                        currentLevel++;
+                        createMaze();
+                        break;
+                    case ACTION_END_GAME:
+                        getContext().startActivity(new Intent(getContext(),com.example.labirinto.GameOver.class));
+                        break;
+                    default:
+                        System.out.println("Finished");
+                        break;
+                }
+            }
+        });
 
         mp.start();
-    }
-
-    @Override
-    public void onCompletion(MediaPlayer mediaPlayer) {
-        mp.release();
-
-        switch (nextAction) {
-            case ACTION_CREATE_MAZE:
-                currentLevel++;
-                createMaze();
-                break;
-            case ACTION_END_GAME:
-                getContext().startActivity(new Intent(getContext(),com.example.labirinto.GameOver.class));
-                break;
-            default:
-                System.out.println("Finished");
-                break;
-        }
     }
 
     private void checkExit() {
