@@ -9,8 +9,10 @@ import android.graphics.Paint;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.Vibrator;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -21,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 
-public class GameView extends View {
+public class GameView extends View implements MediaPlayer.OnCompletionListener {
 
     private enum Direction {
         UP, DOWN, LEFT, RIGHT
@@ -33,14 +35,22 @@ public class GameView extends View {
 
     private static final int MAX_LEVELS = 3;
     private int currentLevel = 1;
+    private String nextAction;
 
     private Cell[][] cells;
     private Cell player, exit;
     private static final int COLS = 7, ROWS = 10;
+    private static final String
+        ACTION_CREATE_MAZE = "ACTION_CREATE_MAZE",
+        ACTION_END_GAME = "ACTION_END_GAME";
+
+
     private static final float WALL_THICKNESS = 4;
     private float cellSize, hMargin, vMargin;
     private Paint wallPaint, playerPaint, exitPaint;
     private Random random;
+
+    MediaPlayer mp;
 
     public GameView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -93,6 +103,9 @@ public class GameView extends View {
                 current = stack.pop();
             }
         } while (!stack.empty());
+
+        nextAction = "NOTHING";
+        playSound("START");
 
     }
 
@@ -258,15 +271,56 @@ public class GameView extends View {
         invalidate();
     }
 
+    private void playSound(String type) {
+        int resId;
+
+        switch (type) {
+            case "START":
+                resId = R.raw.start;
+                break;
+            case "ERROR":
+                resId = R.raw.retardado;
+                break;
+            case "EXIT":
+                resId = R.raw.miseravel_genio;
+                break;
+            default:
+                resId = 0;
+                break;
+        }
+
+        mp = MediaPlayer.create(getContext(), resId);
+        mp.setOnCompletionListener(this);
+
+        mp.start();
+    }
+
+    @Override
+    public void onCompletion(MediaPlayer mediaPlayer) {
+        mp.release();
+
+        switch (nextAction) {
+            case ACTION_CREATE_MAZE:
+                currentLevel++;
+                createMaze();
+                break;
+            case ACTION_END_GAME:
+                getContext().startActivity(new Intent(getContext(),com.example.labirinto.GameOver.class));
+                break;
+            default:
+                System.out.println("Finished");
+                break;
+        }
+    }
+
     private void checkExit() {
         if (player == exit) {
             if (currentLevel < MAX_LEVELS) {
-                createMaze();
-                currentLevel++;
+                nextAction = ACTION_CREATE_MAZE;
             } else {
-                getContext().startActivity(new Intent(getContext(),com.example.labirinto.GameOver.class));
+                nextAction = ACTION_END_GAME;
             }
-
+            playSound("EXIT");
         }
     }
 
