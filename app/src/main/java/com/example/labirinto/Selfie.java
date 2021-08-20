@@ -22,6 +22,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -72,9 +74,11 @@ public class Selfie extends AppCompatActivity {
         if (requestCode == CAMERA_ACTION_CODE && resultCode == RESULT_OK && data != null) {
             Bundle bundle = data.getExtras();
             Bitmap finalPicture = (Bitmap) bundle.get("data");
-            imageViewSelfie.setImageBitmap(finalPicture);
+            RoundedBitmapDrawable img = RoundedBitmapDrawableFactory.create(getResources(),finalPicture);
+            img.setCircular(true);
 
-            //Bitmap bmp = finalPicture.copy(finalPicture.getConfig(), true);
+            imageViewSelfie.setImageDrawable(img);
+
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             finalPicture.compress(Bitmap.CompressFormat.PNG, 100, stream);
             selfieByteArray = stream.toByteArray();
