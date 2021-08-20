@@ -6,8 +6,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +21,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Selfie extends AppCompatActivity {
 
@@ -26,6 +35,8 @@ public class Selfie extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE = 200;
     ImageView imageViewSelfie;
     Button takePictureBtn;
+    String currentPhotoPath;
+    byte[] selfieByteArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +73,11 @@ public class Selfie extends AppCompatActivity {
             Bundle bundle = data.getExtras();
             Bitmap finalPicture = (Bitmap) bundle.get("data");
             imageViewSelfie.setImageBitmap(finalPicture);
+
+            //Bitmap bmp = finalPicture.copy(finalPicture.getConfig(), true);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            finalPicture.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            selfieByteArray = stream.toByteArray();
         }
     }
 
@@ -119,8 +135,26 @@ public class Selfie extends AppCompatActivity {
                 .show();
     }
 
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
     public void game(View v) {
-        startActivity(new Intent(this, com.example.labirinto.Game.class));
+        Intent intent = new Intent(this, com.example.labirinto.Game.class);
+        intent.putExtra("selfieByteArray", selfieByteArray);
+        startActivity(intent);
     }
 
 

@@ -3,6 +3,7 @@ package com.example.labirinto;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -10,6 +11,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
+import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -49,11 +51,14 @@ public class GameView extends View implements MediaPlayer.OnCompletionListener {
     private float cellSize, hMargin, vMargin;
     private Paint wallPaint, playerPaint, exitPaint;
     private Random random;
+    private byte[] selfieByteArray;
 
     MediaPlayer mp;
 
     public GameView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+
+        selfieByteArray = Game.getByteArray();
 
         wallPaint = new Paint();
         wallPaint.setColor(Color.BLACK);
