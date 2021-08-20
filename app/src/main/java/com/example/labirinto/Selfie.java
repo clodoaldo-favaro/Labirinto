@@ -95,19 +95,19 @@ public class Selfie extends AppCompatActivity {
 
     public Bitmap bitmapCircularCroper(Bitmap bitmapimg){
         Bitmap output = Bitmap.createBitmap(bitmapimg.getWidth(),
-                bitmapimg.getHeight(), Bitmap.Config.ARGB_8888);
+                bitmapimg.getWidth(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
 
         final int color = 0xff424242;
         final Paint paint = new Paint();
         final Rect rect = new Rect(0, 0, bitmapimg.getWidth(),
-                bitmapimg.getHeight());
+                bitmapimg.getWidth());
 
         paint.setAntiAlias(true);
         canvas.drawARGB(0, 0, 0, 0);
         paint.setColor(color);
         canvas.drawCircle(bitmapimg.getWidth() / 2,
-                bitmapimg.getHeight() / 2, bitmapimg.getWidth() / 2, paint);
+                bitmapimg.getWidth() / 2, bitmapimg.getWidth() / 2, paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bitmapimg, rect, rect, paint);
         return output;
