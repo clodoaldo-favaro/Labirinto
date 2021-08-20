@@ -6,6 +6,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -74,6 +79,9 @@ public class Selfie extends AppCompatActivity {
         if (requestCode == CAMERA_ACTION_CODE && resultCode == RESULT_OK && data != null) {
             Bundle bundle = data.getExtras();
             Bitmap finalPicture = (Bitmap) bundle.get("data");
+
+            finalPicture = bitmapCircularCroper(finalPicture);
+
             RoundedBitmapDrawable img = RoundedBitmapDrawableFactory.create(getResources(),finalPicture);
             img.setCircular(true);
 
@@ -83,6 +91,27 @@ public class Selfie extends AppCompatActivity {
             finalPicture.compress(Bitmap.CompressFormat.PNG, 100, stream);
             selfieByteArray = stream.toByteArray();
         }
+    }
+
+    public Bitmap bitmapCircularCroper(Bitmap bitmapimg){
+        Bitmap output = Bitmap.createBitmap(bitmapimg.getWidth(),
+                bitmapimg.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmapimg.getWidth(),
+                bitmapimg.getHeight());
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawCircle(bitmapimg.getWidth() / 2,
+                bitmapimg.getHeight() / 2, bitmapimg.getWidth() / 2, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmapimg, rect, rect, paint);
+        return output;
+
     }
 
     private boolean checkPermission() {
