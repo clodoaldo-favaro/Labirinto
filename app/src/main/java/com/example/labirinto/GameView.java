@@ -4,9 +4,12 @@ package com.example.labirinto;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
@@ -230,13 +233,24 @@ public class GameView extends View implements MediaPlayer.OnCompletionListener {
 
         float margin = cellSize/10;
 
-        canvas.drawRect(
+        RectF playerDestRect = new RectF(
+                player.col*cellSize+margin,
+                player.row*cellSize+margin,
+                (player.col + 1)*cellSize-margin,
+                (player.row + 1)*cellSize-margin
+                );
+
+        Bitmap bmp = BitmapFactory.decodeByteArray(selfieByteArray, 0, selfieByteArray.length);
+
+        canvas.drawBitmap(bmp, null, playerDestRect, null);
+
+        /*canvas.drawRect(
                 player.col*cellSize+margin,
                 player.row*cellSize+margin,
                 (player.col + 1)*cellSize-margin,
                 (player.row + 1)*cellSize-margin,
                 playerPaint
-        );
+        );*/
 
     }
 
