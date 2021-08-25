@@ -192,7 +192,6 @@ public class Selfie extends AppCompatActivity {
         } else {
             Toast.makeText(getApplicationContext(), "TAKE A FUCKING PICTURE FIRST, YOU DUMB CUNT!", Toast.LENGTH_SHORT).show();
         }
-
     }
 
 
