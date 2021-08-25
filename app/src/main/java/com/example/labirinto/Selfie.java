@@ -185,9 +185,14 @@ public class Selfie extends AppCompatActivity {
     }
 
     public void game(View v) {
-        Intent intent = new Intent(this, com.example.labirinto.Game.class);
-        intent.putExtra("selfieByteArray", selfieByteArray);
-        startActivity(intent);
+        if (selfieByteArray != null && selfieByteArray.length > 0) {
+            Intent intent = new Intent(this, com.example.labirinto.Game.class);
+            intent.putExtra("selfieByteArray", selfieByteArray);
+            startActivity(intent);
+        } else {
+            Toast.makeText(getApplicationContext(), "TAKE A FUCKING PICTURE FIRST, YOU DUMB CUNT!", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 
