@@ -17,6 +17,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -185,25 +186,33 @@ public class GameView extends View implements MediaPlayer.OnCompletionListener {
         canvas.drawText("Level " + currentLevel, xPos, 56, textPaint);
     }
 
+    public int pxToDp(int px) {
+        DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
+        int dp = Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+        return dp;
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
+        int buttonHeightPx = Game.getButtonHeight();
+
         canvas.drawColor(Color.WHITE);
 
         drawCurrentLevelText(canvas);
 
         int width = getWidth();
-        int height = getHeight();
+        int height = getHeight() - buttonHeightPx;
 
         if (width/height < COLS/ROWS) {
             cellSize = width/(COLS + 1) - 8;
         } else {
-            cellSize = height/(ROWS + 1) - 8;
+            cellSize = height/(ROWS + 1);
         }
 
         hMargin = (width - COLS*cellSize)/2;
         vMargin = (height - ROWS*cellSize)/2;
 
-        canvas.translate(hMargin, vMargin);
+        canvas.translate(hMargin, vMargin + 48);
 
         if (currentLevel == 2) {
             wallPaint.setColor(Color.BLUE);
