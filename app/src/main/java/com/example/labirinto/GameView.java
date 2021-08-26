@@ -269,34 +269,40 @@ public class GameView extends View implements MediaPlayer.OnCompletionListener {
                 if (!player.topWall) {
                     player = cells[player.col][player.row - 1];
                 } else {
-                    vibrator.vibrate(400);
+                    collisionVibrate(vibrator);
                 }
                 break;
             case DOWN:
                 if (!player.bottomWall) {
                     player = cells[player.col][player.row + 1];
                 } else {
-                    vibrator.vibrate(400);
+                    collisionVibrate(vibrator);
                 }
                 break;
             case LEFT:
                 if (!(player.leftWall || player.col == 0)) {
                     player = cells[player.col - 1][player.row];
                 } else {
-                    vibrator.vibrate(400);
+                    collisionVibrate(vibrator);
                 }
                 break;
             case RIGHT:
                 if (!player.rightWall) {
                     player = cells[player.col + 1][player.row];
                 } else {
-                    vibrator.vibrate(400);
+                    collisionVibrate(vibrator);
                 }
                 break;
         }
 
         checkExit();
         invalidate();
+    }
+
+    private void collisionVibrate(Vibrator vibrator) {
+        if (vibrator.hasVibrator()) {
+            vibrator.vibrate(200);
+        }
     }
 
     private void playSound(String type) {
