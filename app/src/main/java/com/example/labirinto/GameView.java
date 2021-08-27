@@ -8,20 +8,18 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
-import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
@@ -29,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 
-public class GameView extends View implements MediaPlayer.OnCompletionListener {
+public class GameView extends View implements MediaPlayer.OnCompletionListener, SensorEventListener {
 
     private enum Direction {
         UP, DOWN, LEFT, RIGHT
@@ -38,6 +36,9 @@ public class GameView extends View implements MediaPlayer.OnCompletionListener {
     private Vibrator vibrator;
     private SensorManager sensorManager;
     private Sensor gyroscopeSensor;
+    private Sensor accelerometerSensor;
+
+    private final float alpha = 0.8f;
 
     private static final int MAX_LEVELS = 3;
     private int currentLevel = 1;
@@ -79,6 +80,10 @@ public class GameView extends View implements MediaPlayer.OnCompletionListener {
         vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         gyroscopeSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+        sensorManager.registerListener(this, gyroscopeSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
         createMaze();
     }
@@ -313,7 +318,7 @@ public class GameView extends View implements MediaPlayer.OnCompletionListener {
                 resId = R.raw.start;
                 break;
             case "ERROR":
-                resId = R.raw.retardado;
+                resId = R.raw.erro;
                 break;
             case "EXIT":
                 resId = R.raw.miseravel_genio;
@@ -337,6 +342,8 @@ public class GameView extends View implements MediaPlayer.OnCompletionListener {
             case ACTION_CREATE_MAZE:
                 currentLevel++;
                 createMaze();
+                sensorManager.registerListener(this, gyroscopeSensor, SensorManager.SENSOR_DELAY_NORMAL);
+                sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
                 invalidate();
                 break;
             case ACTION_END_GAME:
@@ -357,12 +364,66 @@ public class GameView extends View implements MediaPlayer.OnCompletionListener {
                 nextAction = ACTION_END_GAME;
             }
             playSound("EXIT");
+        } else {
+            sensorManager.registerListener(this, gyroscopeSensor, SensorManager.SENSOR_DELAY_NORMAL);
+            sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
     }
 
+    @Override
     public void onSensorChanged(SensorEvent event) {
-        System.out.println(event.sensor.getName());
+        int sensorType = event.sensor.getType();
+        float[] gravity = new float[3];
+        float[] linear_acceleration = new float[3];
+        int x, y, z;
+        Direction direction;
+
+
+        if (sensorType == Sensor.TYPE_ACCELEROMETER) {
+            // Isolate the force of gravity with the low-pass filter.
+            gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];
+            gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];
+            gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2];
+
+            // Remove the gravity contribution with the high-pass filter.
+            linear_acceleration[0] = event.values[0] - gravity[0];
+            linear_acceleration[1] = event.values[1] - gravity[1];
+            linear_acceleration[2] = event.values[2] - gravity[2];
+
+            x = (int) linear_acceleration[0];
+            y = (int) linear_acceleration[1];
+            z = (int) linear_acceleration[2];
+
+            if (Math.abs(x) > 0) {
+                sensorManager.unregisterListener(this);
+                Log.i("ACCELERATOR", "Aceleração no eixo X = " + x);
+                if (x > 0) {
+                    movePlayer(Direction.RIGHT);
+                } else {
+                    movePlayer(Direction.LEFT);
+                }
+
+            } else if (Math.abs(y) > 0) {
+                sensorManager.unregisterListener(this);
+                if (y > 0) {
+                    movePlayer(Direction.UP);
+                } else {
+                    movePlayer(Direction.DOWN);
+                }
+                Log.i("ACCELERATOR", "Aceleração no eixo Y = " + y);
+            }
+
+
+        } else if (sensorType == Sensor.TYPE_GYROSCOPE) {
+
+        }
     }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
+    }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
