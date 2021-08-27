@@ -385,6 +385,8 @@ public class GameView extends View implements MediaPlayer.OnCompletionListener, 
             gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];
             gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2];
 
+            /*
+
             Log.i("Event values",
                     String.format("X=%.2f, Y=%.2f, Z=%.2f",
                             event.values[0],
@@ -397,30 +399,37 @@ public class GameView extends View implements MediaPlayer.OnCompletionListener, 
                             gravity[0],
                             gravity[1],
                             gravity[2]));
+            */
 
             // Remove the gravity contribution with the high-pass filter.
             linear_acceleration[0] = event.values[0] - gravity[0];
             linear_acceleration[1] = event.values[1] - gravity[1];
             linear_acceleration[2] = event.values[2] - gravity[2];
 
+            /*
             Log.i("Float acc",
                     String.format("X=%.2f, Y=%.2f, Z=%.2f",
                             linear_acceleration[0],
                             linear_acceleration[1],
                             linear_acceleration[2]));
-
+            */
 
 
             x = (int) linear_acceleration[0];
             y = (int) linear_acceleration[1];
             z = (int) linear_acceleration[2];
 
+
+            /*
             Log.i("INT acc",
                     String.format("X=%d, Y=%d, Z=%d",
                             x,
                             y,
                             z));
 
+             */
+
+            /*
             if (Math.abs(x) > 0) {
                 sensorManager.unregisterListener(this);
                 Log.i("ACCELERATOR", "Aceleração no eixo X = " + x);
@@ -439,9 +448,14 @@ public class GameView extends View implements MediaPlayer.OnCompletionListener, 
                 }
                 Log.i("ACCELERATOR", "Aceleração no eixo Y = " + y);
             }
-
+            */
 
         } else if (sensorType == Sensor.TYPE_GYROSCOPE) {
+            Log.i("GYROSCOPE Event values",
+                    String.format("X=%.2f, Y=%.2f, Z=%.2f",
+                            event.values[0],
+                            event.values[1],
+                            event.values[2]));
 
         }
     }
