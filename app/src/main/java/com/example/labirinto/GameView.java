@@ -451,12 +451,14 @@ public class GameView extends View implements MediaPlayer.OnCompletionListener, 
             */
 
         } else if (sensorType == Sensor.TYPE_GYROSCOPE) {
-            Log.i("GYROSCOPE Event values",
-                    String.format("X=%.2f, Y=%.2f, Z=%.2f",
-                            event.values[0],
-                            event.values[1],
-                            event.values[2]));
 
+            if (event.values[0] > 0.05 || event.values[1] > 0.05) {
+                Log.i("GYROSCOPE Event values",
+                        String.format("X=%.2f, Y=%.2f, Z=%.2f",
+                                event.values[0],
+                                event.values[1],
+                                event.values[2]));
+            }
         }
     }
 
