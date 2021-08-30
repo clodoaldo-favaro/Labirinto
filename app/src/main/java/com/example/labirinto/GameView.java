@@ -27,7 +27,10 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 
-public class GameView extends View implements MediaPlayer.OnCompletionListener, SensorEventListener {
+public class GameView
+        extends View
+        implements MediaPlayer.OnCompletionListener,
+        SensorEventListener {
 
     private enum Direction {
         UP, DOWN, LEFT, RIGHT
@@ -35,7 +38,6 @@ public class GameView extends View implements MediaPlayer.OnCompletionListener, 
 
     private Vibrator vibrator;
     private SensorManager sensorManager;
-    private Sensor gyroscopeSensor;
     private Sensor accelerometerSensor;
 
     private final float alpha = 0.8f;
@@ -79,10 +81,8 @@ public class GameView extends View implements MediaPlayer.OnCompletionListener, 
 
         vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        gyroscopeSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
-        sensorManager.registerListener(this, gyroscopeSensor, SensorManager.SENSOR_DELAY_NORMAL);
         sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
         createMaze();
@@ -342,7 +342,6 @@ public class GameView extends View implements MediaPlayer.OnCompletionListener, 
             case ACTION_CREATE_MAZE:
                 currentLevel++;
                 createMaze();
-                sensorManager.registerListener(this, gyroscopeSensor, SensorManager.SENSOR_DELAY_NORMAL);
                 sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
                 invalidate();
                 break;
@@ -365,7 +364,6 @@ public class GameView extends View implements MediaPlayer.OnCompletionListener, 
             }
             playSound("EXIT");
         } else {
-            sensorManager.registerListener(this, gyroscopeSensor, SensorManager.SENSOR_DELAY_NORMAL);
             sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
     }
@@ -440,8 +438,6 @@ public class GameView extends View implements MediaPlayer.OnCompletionListener, 
                 Log.i("ACCELERATOR", "Aceleração no eixo Y = " + y);
             }
 
-
-        } else if (sensorType == Sensor.TYPE_GYROSCOPE) {
 
         }
     }
