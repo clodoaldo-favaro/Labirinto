@@ -60,6 +60,8 @@ public class GameView
     private Random random;
     private byte[] selfieByteArray;
 
+    private boolean allowMovement = false;
+
     MediaPlayer mp;
 
     public GameView(Context context, @Nullable AttributeSet attrs) {
@@ -316,12 +318,14 @@ public class GameView
         switch (type) {
             case "START":
                 resId = R.raw.start;
+                allowMovement = false;
                 break;
             case "ERROR":
                 resId = R.raw.erro;
                 break;
             case "EXIT":
                 resId = R.raw.miseravel_genio;
+                allowMovement = false;
                 break;
             default:
                 resId = 0;
@@ -343,6 +347,7 @@ public class GameView
                 currentLevel++;
                 createMaze();
                 sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+                allowMovement = true;
                 invalidate();
                 break;
             case ACTION_END_GAME:
@@ -351,6 +356,7 @@ public class GameView
                 break;
             default:
                 System.out.println("Finished");
+                allowMovement = true;
                 break;
         }
     }
@@ -375,7 +381,7 @@ public class GameView
         float[] linear_acceleration = {0, 0, 0};
         int x, y, z;
 
-        if (sensorType == Sensor.TYPE_ACCELEROMETER) {
+        if (allowMovement && sensorType == Sensor.TYPE_ACCELEROMETER) {
 
             // Isolate the force of gravity with the low-pass filter.
             gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];
@@ -452,7 +458,7 @@ public class GameView
             return true;
         }
 
-        if (event.getAction() == MotionEvent.ACTION_MOVE) {
+        if (allowMovement && event.getAction() == MotionEvent.ACTION_MOVE) {
             float x = event.getX();
             float y = event.getY();
 
