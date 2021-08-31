@@ -374,10 +374,9 @@ public class GameView
         float[] gravity = {0, 0, 0};
         float[] linear_acceleration = {0, 0, 0};
         int x, y, z;
-        Direction direction;
-
 
         if (sensorType == Sensor.TYPE_ACCELEROMETER) {
+
             // Isolate the force of gravity with the low-pass filter.
             gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];
             gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];
@@ -407,8 +406,6 @@ public class GameView
                             linear_acceleration[1],
                             linear_acceleration[2]));
 
-
-
             x = (int) linear_acceleration[0];
             y = (int) linear_acceleration[1];
             z = (int) linear_acceleration[2];
@@ -422,7 +419,7 @@ public class GameView
             if (Math.abs(x) > 0) {
                 sensorManager.unregisterListener(this);
                 Log.i("ACCELERATOR", "Aceleração no eixo X = " + x);
-                if (x > 0) {
+                if (x < 0) {
                     movePlayer(Direction.RIGHT);
                 } else {
                     movePlayer(Direction.LEFT);
@@ -430,7 +427,7 @@ public class GameView
 
             } else if (Math.abs(y) > 0) {
                 sensorManager.unregisterListener(this);
-                if (y > 0) {
+                if (y < 0) {
                     movePlayer(Direction.UP);
                 } else {
                     movePlayer(Direction.DOWN);
