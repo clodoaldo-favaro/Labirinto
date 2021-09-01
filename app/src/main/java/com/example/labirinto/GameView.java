@@ -16,8 +16,6 @@ import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -56,8 +54,8 @@ public class GameView
     private static final float inclinationToleranceChangeX = 1.8f;
     private static final float inclinationToleranceChangeUp = 0.7f;
     private static final float inclinationToleranceChangeBottom = 0.9f;
-    private static final int maxColisionBeforeVibrate = 3;
-    private int currentColisionsCounter;
+    private static final int maxCollisionsBeforeVibrate = 3;
+    private int currentCollisionsCounter;
     private static final String
         ACTION_CREATE_MAZE = "ACTION_CREATE_MAZE",
         ACTION_END_GAME = "ACTION_END_GAME";
@@ -81,7 +79,7 @@ public class GameView
         selfieByteArray = Game.getByteArray();
 
         initialY = 1000;
-        currentColisionsCounter = 0;
+        currentCollisionsCounter = 0;
 
         wallPaint = new Paint();
         wallPaint.setColor(Color.BLACK);
@@ -207,12 +205,6 @@ public class GameView
         canvas.drawText("Level " + currentLevel, xPos, 56, textPaint);
     }
 
-    public int pxToDp(int px) {
-        DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
-        int dp = Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
-        return dp;
-    }
-
     @Override
     protected void onDraw(Canvas canvas) {
         int buttonHeightPx = Game.getButtonHeight();
@@ -273,15 +265,6 @@ public class GameView
         Bitmap bmp = BitmapFactory.decodeByteArray(selfieByteArray, 0, selfieByteArray.length);
 
         canvas.drawBitmap(bmp, null, playerDestRect, null);
-
-        /*canvas.drawRect(
-                player.col*cellSize+margin,
-                player.row*cellSize+margin,
-                (player.col + 1)*cellSize-margin,
-                (player.row + 1)*cellSize-margin,
-                playerPaint
-        );*/
-
     }
 
     private void movePlayer(Direction direction, MovementType movementType) {
@@ -321,7 +304,7 @@ public class GameView
         if (collision) {
             collisionHandler(vibrator, movementType);
         } else {
-            currentColisionsCounter = 0;
+            currentCollisionsCounter = 0;
         }
 
         checkExit();
@@ -330,9 +313,9 @@ public class GameView
 
     private void collisionHandler(Vibrator vibrator, MovementType movementType) {
         if (movementType == MovementType.SENSOR) {
-            currentColisionsCounter++;
+            currentCollisionsCounter++;
         }
-        if (movementType == MovementType.TOUCH || currentColisionsCounter > maxColisionBeforeVibrate) {
+        if (movementType == MovementType.TOUCH || currentCollisionsCounter > maxCollisionsBeforeVibrate) {
             collisionVibrate(vibrator);
         }
     }
@@ -386,7 +369,6 @@ public class GameView
                 invalidate();
                 break;
             default:
-                System.out.println("Finished");
                 allowMovement = true;
                 break;
         }
@@ -410,7 +392,7 @@ public class GameView
         int sensorType = event.sensor.getType();
         float[] gravity = {0, 0, 0};
         float[] linear_acceleration = {0, 0, 0};
-        float x, y, z;
+        float x, y;
 
         if (allowMovement && sensorType == Sensor.TYPE_ACCELEROMETER) {
             // Isolate the force of gravity with the low-pass filter.
@@ -418,33 +400,13 @@ public class GameView
             gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];
             gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2];
 
-            /*Log.i("Event values",
-                    String.format("X=%.2f, Y=%.2f, Z=%.2f",
-                            event.values[0],
-                            event.values[1],
-                            event.values[2]));
-
-
-            Log.i("Gravity",
-                    String.format("X=%.2f, Y=%.2f, Z=%.2f",
-                            gravity[0],
-                            gravity[1],
-                            gravity[2]));*/
-
             // Remove the gravity contribution with the high-pass filter.
             linear_acceleration[0] = event.values[0] - gravity[0];
             linear_acceleration[1] = event.values[1] - gravity[1];
             linear_acceleration[2] = event.values[2] - gravity[2];
 
-            /*Log.i("linear_acceleration",
-                    String.format("X=%.2f, Y=%.2f, Z=%.2f",
-                            linear_acceleration[0],
-                            linear_acceleration[1],
-                            linear_acceleration[2]));*/
-
             x = linear_acceleration[0];
             y = linear_acceleration[1];
-            z = linear_acceleration[2];
 
             if (initialY > 900) {
                 initialY = y;
@@ -452,7 +414,7 @@ public class GameView
 
             if (Math.abs(x) > inclinationToleranceChangeX) {
                 sensorManager.unregisterListener(this);
-                //Log.i("ACCELERATOR", "Aceleração no eixo X = " + x);
+
                 if (x < 0) {
                     movePlayer(Direction.RIGHT, MovementType.SENSOR);
                 } else {
@@ -468,7 +430,6 @@ public class GameView
                     sensorManager.unregisterListener(this);
                     movePlayer(Direction.DOWN, MovementType.SENSOR);
                 }
-                //Log.i("ACCELERATOR", "Aceleração no eixo Y = " + y);
             }
         }
     }
@@ -500,21 +461,15 @@ public class GameView
 
             if (absDx > cellSize || absDy > cellSize) {
                 if (absDx > absDy) {
-                    //move in x-direction
                     if (dx > 0) {
-                        //move to the right
                         movePlayer(Direction.RIGHT, MovementType.TOUCH);
                     } else {
-                        //move to the left
                         movePlayer(Direction.LEFT, MovementType.TOUCH);
                     }
                 } else {
-                    //move in y-direction
                     if (dy > 0) {
-                        //move down
                         movePlayer(Direction.DOWN, MovementType.TOUCH);
                     } else {
-                        //move up
                         movePlayer(Direction.UP, MovementType.TOUCH);
                     }
                 }
