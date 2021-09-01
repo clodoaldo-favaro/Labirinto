@@ -71,7 +71,7 @@ public class GameView
 
     private boolean allowMovement = false;
 
-    private float initialX, initialY;
+    private float initialY;
 
     MediaPlayer mp;
 
@@ -80,7 +80,7 @@ public class GameView
 
         selfieByteArray = Game.getByteArray();
 
-        initialX = initialY = 1000;
+        initialY = 1000;
         currentColisionsCounter = 0;
 
         wallPaint = new Paint();
@@ -107,7 +107,7 @@ public class GameView
     private void createMaze() {
         Stack<Cell> stack = new Stack<>();
         Cell current, next;
-        initialX = initialY = 1000;
+        initialY = 1000;
         cells = new Cell[COLS][ROWS];
 
         for (int x = 0; x < COLS; x++) {
@@ -418,7 +418,7 @@ public class GameView
             gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];
             gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2];
 
-            Log.i("Event values",
+            /*Log.i("Event values",
                     String.format("X=%.2f, Y=%.2f, Z=%.2f",
                             event.values[0],
                             event.values[1],
@@ -429,48 +429,48 @@ public class GameView
                     String.format("X=%.2f, Y=%.2f, Z=%.2f",
                             gravity[0],
                             gravity[1],
-                            gravity[2]));
+                            gravity[2]));*/
 
             // Remove the gravity contribution with the high-pass filter.
             linear_acceleration[0] = event.values[0] - gravity[0];
             linear_acceleration[1] = event.values[1] - gravity[1];
             linear_acceleration[2] = event.values[2] - gravity[2];
 
-            Log.i("linear_acceleration",
+            /*Log.i("linear_acceleration",
                     String.format("X=%.2f, Y=%.2f, Z=%.2f",
                             linear_acceleration[0],
                             linear_acceleration[1],
-                            linear_acceleration[2]));
+                            linear_acceleration[2]));*/
 
             x = linear_acceleration[0];
             y = linear_acceleration[1];
             z = linear_acceleration[2];
 
-            if (initialX > 900 && initialY > 900) {
-                initialX = x;
+            if (initialY > 900) {
                 initialY = y;
-            } else {
-                if (Math.abs(x - initialX) > inclinationToleranceChangeX) {
-                    sensorManager.unregisterListener(this);
-                    Log.i("ACCELERATOR", "Aceleração no eixo X = " + x);
-                    if (x < initialX) {
-                        movePlayer(Direction.RIGHT, MovementType.SENSOR);
-                    } else {
-                        movePlayer(Direction.LEFT, MovementType.SENSOR);
-                    }
-
-                } else if ((Math.abs(y - initialY) > inclinationToleranceChangeUp) || (Math.abs(y - initialY) > inclinationToleranceChangeBottom)) {
-                    sensorManager.unregisterListener(this);
-                    if (y < initialY) {
-                        sensorManager.unregisterListener(this);
-                        movePlayer(Direction.UP, MovementType.SENSOR);
-                    } else if (y > initialY) {
-                        sensorManager.unregisterListener(this);
-                        movePlayer(Direction.DOWN, MovementType.SENSOR);
-                    }
-                    Log.i("ACCELERATOR", "Aceleração no eixo Y = " + y);
-                }
             }
+
+            if (Math.abs(x) > inclinationToleranceChangeX) {
+                sensorManager.unregisterListener(this);
+                //Log.i("ACCELERATOR", "Aceleração no eixo X = " + x);
+                if (x < 0) {
+                    movePlayer(Direction.RIGHT, MovementType.SENSOR);
+                } else {
+                    movePlayer(Direction.LEFT, MovementType.SENSOR);
+                }
+
+            } else if ((Math.abs(y - initialY) > inclinationToleranceChangeUp) || (Math.abs(y - initialY) > inclinationToleranceChangeBottom)) {
+                sensorManager.unregisterListener(this);
+                if (y < initialY) {
+                    sensorManager.unregisterListener(this);
+                    movePlayer(Direction.UP, MovementType.SENSOR);
+                } else if (y > initialY) {
+                    sensorManager.unregisterListener(this);
+                    movePlayer(Direction.DOWN, MovementType.SENSOR);
+                }
+                //Log.i("ACCELERATOR", "Aceleração no eixo Y = " + y);
+            }
+
 
 
 
