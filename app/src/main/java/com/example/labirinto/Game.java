@@ -2,11 +2,13 @@ package com.example.labirinto;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.solver.state.Dimension;
 
 public class Game extends AppCompatActivity {
     private static byte[] selfieByteArray;
@@ -22,6 +24,10 @@ public class Game extends AppCompatActivity {
 
         setContentView(R.layout.game);
         restartButton = findViewById(R.id.button3);
+
+        Display display = getWindowManager().getDefaultDisplay();
+        int width = display.getWidth();
+        int height = display.getHeight();
 
         ViewTreeObserver viewTreeObserver = restartButton.getViewTreeObserver();
         if (viewTreeObserver.isAlive()) {

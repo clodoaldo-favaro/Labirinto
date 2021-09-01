@@ -216,14 +216,26 @@ public class GameView
         int width = getWidth();
         int height = getHeight() - buttonHeightPx;
 
+        float maxCellWidth = width / COLS;
+        float maxCellHeight = height / ROWS;
+
         if (width/height < COLS/ROWS) {
             cellSize = width/(COLS + 1) - 8;
         } else {
             cellSize = height/(ROWS + 1);
         }
 
+        if (cellSize > maxCellWidth) {
+            cellSize -= (cellSize - maxCellWidth);
+        }
+
         hMargin = (width - COLS*cellSize)/2;
         vMargin = (height - ROWS*cellSize)/2;
+
+        if (hMargin <= 1.0) {
+            hMargin = 5;
+            cellSize -= 2;
+        }
 
         canvas.translate(hMargin, vMargin + 48);
 
