@@ -470,18 +470,11 @@ public class GameView
                 }
                 //Log.i("ACCELERATOR", "Aceleração no eixo Y = " + y);
             }
-
-
-
-
-
-
         }
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
-
     }
 
 
