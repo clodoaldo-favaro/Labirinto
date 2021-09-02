@@ -1,7 +1,10 @@
 package com.example.labirinto;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -25,9 +28,10 @@ public class Game extends AppCompatActivity {
         setContentView(R.layout.game);
         restartButton = findViewById(R.id.button3);
 
-        Display display = getWindowManager().getDefaultDisplay();
-        int width = display.getWidth();
-        int height = display.getHeight();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
 
         ViewTreeObserver viewTreeObserver = restartButton.getViewTreeObserver();
         if (viewTreeObserver.isAlive()) {
@@ -38,6 +42,27 @@ public class Game extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    public boolean showNavigationBar(Resources resources)
+    {
+        int id = resources.getIdentifier("config_showNavigationBar", "bool", "android");
+        return id > 0 && resources.getBoolean(id);
+    }
+
+    private int getNavigationBarHeight() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            DisplayMetrics metrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            int usableHeight = metrics.heightPixels;
+            getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
+            int realHeight = metrics.heightPixels;
+            if (realHeight > usableHeight)
+                return realHeight - usableHeight;
+            else
+                return 0;
+        }
+        return 0;
     }
 
     public static byte[] getByteArray() {

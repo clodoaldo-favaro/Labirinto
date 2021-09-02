@@ -54,7 +54,7 @@ public class GameView
     private static final float inclinationToleranceChangeX = 1.8f;
     private static final float inclinationToleranceChangeUp = 0.7f;
     private static final float inclinationToleranceChangeBottom = 0.9f;
-    private static final int maxCollisionsBeforeVibrate = 3;
+    private static final int maxCollisionsBeforeVibrate = 100;
     private int currentCollisionsCounter;
     private static final String
         ACTION_CREATE_MAZE = "ACTION_CREATE_MAZE",
@@ -97,7 +97,7 @@ public class GameView
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
-        sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_GAME);
+        sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_UI);
 
         createMaze();
     }
@@ -372,7 +372,7 @@ public class GameView
             case ACTION_CREATE_MAZE:
                 currentLevel++;
                 createMaze();
-                sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+                //sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
                 allowMovement = true;
                 invalidate();
                 break;
@@ -395,7 +395,7 @@ public class GameView
             }
             playSound("EXIT");
         } else {
-            sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+            //sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
     }
 
@@ -425,7 +425,7 @@ public class GameView
             }
 
             if (Math.abs(x) > inclinationToleranceChangeX) {
-                sensorManager.unregisterListener(this);
+                //sensorManager.unregisterListener(this);
 
                 if (x < 0) {
                     movePlayer(Direction.RIGHT, MovementType.SENSOR);
@@ -434,12 +434,12 @@ public class GameView
                 }
 
             } else if ((Math.abs(y - initialY) > inclinationToleranceChangeUp) || (Math.abs(y - initialY) > inclinationToleranceChangeBottom)) {
-                sensorManager.unregisterListener(this);
+                //sensorManager.unregisterListener(this);
                 if (y < initialY) {
-                    sensorManager.unregisterListener(this);
+                    //sensorManager.unregisterListener(this);
                     movePlayer(Direction.UP, MovementType.SENSOR);
                 } else if (y > initialY) {
-                    sensorManager.unregisterListener(this);
+                    //sensorManager.unregisterListener(this);
                     movePlayer(Direction.DOWN, MovementType.SENSOR);
                 }
             }
