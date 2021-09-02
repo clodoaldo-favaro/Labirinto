@@ -232,9 +232,9 @@ public class GameView
         hMargin = (width - COLS*cellSize)/2;
         vMargin = (height - ROWS*cellSize)/2;
 
-        if (hMargin <= 1.0) {
-            hMargin = 5;
-            cellSize -= 2;
+        if (hMargin <= 12.0) {
+            hMargin = 12;
+            cellSize = (width - 2*hMargin)/COLS;
         }
 
         canvas.translate(hMargin, vMargin + 48);
