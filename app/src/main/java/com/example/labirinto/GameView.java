@@ -54,7 +54,7 @@ public class GameView
     private static final float inclinationToleranceChangeX = 1.8f;
     private static final float inclinationToleranceChangeUp = 0.7f;
     private static final float inclinationToleranceChangeBottom = 0.9f;
-    private static final int maxCollisionsBeforeVibrate = 100;
+    private static final int maxCollisionsBeforeVibrate = 20;
     private int currentCollisionsCounter;
     private static final String
         ACTION_CREATE_MAZE = "ACTION_CREATE_MAZE",
