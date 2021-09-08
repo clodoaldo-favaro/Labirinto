@@ -54,7 +54,7 @@ public class GameView
     private static final float inclinationToleranceChangeX = 1.8f;
     private static final float inclinationToleranceChangeUp = 0.7f;
     private static final float inclinationToleranceChangeBottom = 0.9f;
-    private static final int maxCollisionsBeforeVibrate = 20;
+    private static final int maxCollisionsBeforeVibrate = 5;
     private int currentCollisionsCounter;
     private static final String
         ACTION_CREATE_MAZE = "ACTION_CREATE_MAZE",
@@ -425,21 +425,16 @@ public class GameView
             }
 
             if (Math.abs(x) > inclinationToleranceChangeX) {
-                //sensorManager.unregisterListener(this);
-
                 if (x < 0) {
                     movePlayer(Direction.RIGHT, MovementType.SENSOR);
                 } else {
                     movePlayer(Direction.LEFT, MovementType.SENSOR);
                 }
-
-            } else if ((Math.abs(y - initialY) > inclinationToleranceChangeUp) || (Math.abs(y - initialY) > inclinationToleranceChangeBottom)) {
-                //sensorManager.unregisterListener(this);
+            } else if ((Math.abs(y - initialY) > inclinationToleranceChangeUp) ||
+                    (Math.abs(y - initialY) > inclinationToleranceChangeBottom)) {
                 if (y < initialY) {
-                    //sensorManager.unregisterListener(this);
                     movePlayer(Direction.UP, MovementType.SENSOR);
                 } else if (y > initialY) {
-                    //sensorManager.unregisterListener(this);
                     movePlayer(Direction.DOWN, MovementType.SENSOR);
                 }
             }
