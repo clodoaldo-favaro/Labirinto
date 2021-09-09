@@ -67,6 +67,8 @@ public class Selfie extends AppCompatActivity {
 
     private void dispatchTakePictureIntent() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra("android.intent.extras.CAMERA_FACING", 1);
+
         //if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(intent, CAMERA_ACTION_CODE);
         //}
