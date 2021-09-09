@@ -8,6 +8,7 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +27,8 @@ public class Game extends AppCompatActivity {
         selfieByteArray = extras.getByteArray("selfieByteArray");
 
         setContentView(R.layout.game);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         restartButton = findViewById(R.id.button3);
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
